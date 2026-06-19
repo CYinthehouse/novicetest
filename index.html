@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Novice Korean Speaking Test</title>
+<title>Korean Speaking Test Grader</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
 <link href="https://fonts.cdnfonts.com/css/vcr-osd-mono" rel="stylesheet">
 <style>
@@ -16,23 +16,9 @@
     --ink:#e8e8f5;--ink-soft:#b0b0c8;
     --vt:'VCR OSD Mono',monospace;
     --slate:#3a3a5a;
-
-    /* ===== TYPE SCALE ===== */
-    /* Press Start 2P track — pixel font, renders small, so each step is sized up.
-       Used ONLY for: page title, section headers, tags, labels, buttons. */
-    --px-title:1.2rem;   /* (1) page H1 */
-    --px-head:1.15rem;   /* (2) section headers (part-head h2) — larger */
-    --px-sub:.95rem;     /* (2) qr-card titles, finish h2, P badge — larger */
-    --px-btn:1.0rem;     /* (6) Back/Next buttons — larger */
-    --px-tag:1.0rem;     /* qtags(Warm-up!), pills, progress label */
-    --px-tiny:.92rem;    /* logout(Log out) */
-    --px-counter:.95rem;/* the _ / 20 counter(-2) */
-
-    /* Noto Sans / KR track — body & content. */
-    --t-read:1.3rem;     /* Korean a student taps/reads: chips, MC options */
-    --t-q:1.15rem;       /* card question prompts (qtext, say-line) */
-    --t-body:1.2rem;     /* (4) instructions, inputs, keyword Korean, body — 2 sizes larger */
-    --t-small:.9rem;     /* secondary / helper text */
+    --px-title:1.2rem;--px-head:1.15rem;--px-sub:.95rem;--px-btn:1.0rem;
+    --px-tag:1.0rem;--px-tiny:.92rem;--px-counter:.95rem;
+    --t-read:1.3rem;--t-q:1.15rem;--t-body:1.2rem;--t-small:.9rem;
   }
   html{height:100%;height:-webkit-fill-available;}
   body{
@@ -42,9 +28,7 @@
     min-height:100vh;min-height:100dvh;color:var(--ink);
     padding:18px 14px 80px;line-height:1.6;overflow-x:hidden;
   }
-  .wrap{max-width:680px;margin:0 auto;}
-
-  /* emoji should never carry the pixel-text black outline */
+  .wrap{max-width:860px;margin:0 auto;}
   .emoji{text-shadow:none;font-style:normal;}
 
   /* ===== TITLE ===== */
@@ -54,7 +38,7 @@
       var(--card-bg);
     border:2px solid var(--border-glow);border-radius:2px;
     box-shadow:7px 7px 0 rgba(0,0,0,0.8);
-    padding:32px 22px;text-align:center;
+    padding:32px 22px;text-align:center;margin-bottom:24px;
   }
   h1{
     font-family:'Press Start 2P',cursive;font-size:var(--px-title);line-height:1.7;margin:0;
@@ -62,232 +46,165 @@
   }
   .sub{font-size:var(--t-small);color:var(--neon-yellow);font-weight:700;margin-top:10px;}
 
-  /* ===== PROGRESS ===== */
-  /* equal vertical rhythm: 24px above & below the bar, and above the section label */
-  .progress-bar{
-    height:14px;background:rgba(0,0,0,.4);border:2px solid var(--border-glow);border-radius:2px;
-    margin:24px 0;overflow:hidden;padding:0;box-shadow:4px 4px 0 rgba(0,0,0,0.8);
-  }
-  .progress-fill{
-    height:100%;width:0;border-radius:0;
-    background:linear-gradient(90deg,var(--neon-blue),var(--neon-green));
-    transition:width .45s ease;
-  }
-  .progress-text{
-    display:block;text-align:center;
-    font-family:'Press Start 2P',cursive;color:var(--neon-yellow);font-size:var(--px-tag);
-    text-shadow:var(--retro-shadow);
-  }
-  /* "All done!" / section label: force dead-center, with equal space above and
-     below so it sits centered between the progress bar and the content card */
-  .ptext-label{
-    display:flex;align-items:center;justify-content:center;
-    width:100%;margin:0 auto 24px;text-align:center;
-  }
-  #counter{font-size:var(--px-counter);}
-
-  /* ===== SECTIONS ===== */
-  /* equal 24px gaps between progress label -> pill -> header -> instruction */
-  .section{margin-top:24px;display:flex;flex-direction:column;gap:14px;}
-  .section > *{margin:0;}
-  .part-head{
-    display:flex;align-items:center;gap:14px;
-    background:linear-gradient(135deg,#2a2a4a 0%,#1a1a2e 100%);color:#fff;
-    border:2px solid var(--neon-blue);border-radius:2px;padding:16px 18px;
-    box-shadow:7px 7px 0 rgba(0,0,0,0.8);
-  }
-  .part-head .num{
-    background:linear-gradient(135deg,var(--neon-blue),#0099dd);color:#fff;
-    font-family:'Press Start 2P',cursive;font-size:var(--px-sub);
-    width:42px;height:42px;border-radius:2px;display:flex;align-items:center;justify-content:center;
-    flex:0 0 42px;text-shadow:var(--retro-shadow);
-  }
-  .part-head h2{font-family:'Press Start 2P',cursive;font-size:var(--px-head);line-height:1.7;text-shadow:var(--retro-shadow);}
-  .head-practice{border-color:var(--neon-green) !important;}
-  .head-practice .num{background:linear-gradient(135deg,var(--neon-green),#38a169) !important;}
-
-  /* ===== INSTRUCTION / PILL ===== */
-  .instr{
-    font-size:1.1rem;color:var(--ink);font-weight:500;background:rgba(65,192,255,.08);
-    border:2px solid var(--neon-blue);border-radius:2px;padding:14px 16px;line-height:1.7;box-shadow:7px 7px 0 rgba(0,0,0,0.8);
-  }
-  .instr b{color:var(--neon-yellow);}
-  .practice-pill{
-    align-self:flex-start;display:inline-flex;align-items:center;gap:6px;
-    font-family:'Press Start 2P',cursive;font-size:var(--px-tag);color:#fff;line-height:1.6;
-    background:linear-gradient(135deg,var(--neon-green),#38a169);
-    border:2px solid rgba(255,255,255,.25);border-radius:2px;
-    padding:9px 14px;text-shadow:var(--retro-shadow);box-shadow:4px 4px 0 rgba(0,0,0,0.8);
-  }
-
-  /* ===== START BANNER ===== */
-  .start-banner{
-    text-align:center;background:linear-gradient(135deg,var(--neon-pink),#dd4477);
-    color:#fff;border:2px solid rgba(255,255,255,.25);border-radius:2px;padding:20px 16px;
-    box-shadow:7px 7px 0 rgba(0,0,0,0.8);
-  }
-  .start-banner h2{font-family:'Press Start 2P',cursive;font-size:var(--px-head);line-height:1.7;margin:0 0 8px;text-shadow:var(--retro-shadow),5px 5px 0 rgba(0,0,0,0.6);}
-  .start-banner p{margin:0;font-weight:700;font-size:var(--t-body);text-shadow:var(--retro-shadow);}
-
-  /* ===== CARDS ===== */
-  /* rainbow stripe is a layered background -> always clips to the rounded corners.
-     extra top padding so the qtag (which sits above the top edge) never collides. */
-  .card{
+  /* ===== PANELS ===== */
+  .panel{
     background:
       linear-gradient(90deg,var(--neon-blue),var(--neon-pink),var(--neon-yellow)) top/100% 3px no-repeat,
       var(--card-bg);
     border:2px solid var(--border-glow);border-radius:2px;
-    padding:28px 18px 20px;margin-top:30px;position:relative;
     box-shadow:7px 7px 0 rgba(0,0,0,0.8);
+    padding:24px 20px;margin-bottom:24px;
   }
-  .rec-card{
-    border-color:var(--neon-purple);box-shadow:7px 7px 0 rgba(0,0,0,0.8);
-    background:
-      linear-gradient(90deg,var(--neon-purple),var(--neon-pink)) top/100% 3px no-repeat,
-      var(--card-bg);
+  .panel h2{
+    font-family:'Press Start 2P',cursive;font-size:var(--px-head);line-height:1.7;color:#fff;
+    text-shadow:var(--retro-shadow);margin-bottom:16px;
   }
-  .qtag{
-    position:absolute;top:-13px;left:18px;background:linear-gradient(135deg,var(--neon-pink),#dd4477);color:#fff;
-    font-family:'Press Start 2P',cursive;padding:7px 13px;border-radius:2px;
-    font-size:var(--px-tag);line-height:1;text-shadow:var(--retro-shadow);box-shadow:4px 4px 0 rgba(0,0,0,0.8);z-index:2;
-  }
-  .rec-card .qtag{background:linear-gradient(135deg,var(--neon-purple),#7a52cc);}
-  .qtext{font-family:'Noto Sans','Noto Sans KR',sans-serif;font-size:var(--t-q);font-weight:700;margin:4px 0;color:#fff;line-height:1.55;}
-  .qtext .kr{font-family:'Noto Sans KR',sans-serif;font-weight:700;color:var(--neon-yellow);}
-  .qtext b{color:var(--neon-yellow);}
+  .panel h2 .em{color:var(--neon-blue);}
 
-  /* ===== MC OPTIONS ===== */
-  .options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;}
-  @media(max-width:420px){.options{grid-template-columns:1fr;}}
-  .opt{
-    border:2px solid rgba(255,255,255,.12);border-radius:2px;background:rgba(0,0,0,.3);padding:14px;box-shadow:4px 4px 0 rgba(0,0,0,0.8);
-    display:flex;align-items:center;gap:12px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;
-    font-weight:700;font-size:var(--t-read);color:#fff;transition:all .2s ease;user-select:none;
+  /* collapsible QR */
+  .collapser{cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:0;}
+  .collapser .chev{font-family:var(--vt);color:var(--neon-blue);font-size:1.3rem;transition:transform .2s;}
+  .panel.open .collapser{margin-bottom:16px;}
+  .panel.open .collapser .chev{transform:rotate(90deg);}
+  .qr-body{display:none;}
+  .panel.open .qr-body{display:block;}
+  .instr{
+    font-size:1.05rem;color:var(--ink);font-weight:500;background:rgba(65,192,255,.08);
+    border:2px solid var(--neon-blue);border-radius:2px;padding:14px 16px;line-height:1.7;
+    box-shadow:4px 4px 0 rgba(0,0,0,0.8);margin-bottom:16px;
   }
-  .opt .letter{
-    font-family:'Press Start 2P',cursive;font-size:var(--px-tag);color:#fff;
-    background:linear-gradient(135deg,var(--neon-blue),#0099dd);
-    width:32px;height:32px;border-radius:2px;display:flex;align-items:center;justify-content:center;
-    flex:0 0 32px;text-shadow:var(--retro-shadow);
-  }
-  .opt .krchar{flex:1;}
-  .opt:hover{border-color:var(--neon-blue);background:rgba(65,192,255,.12);transform:translateY(-2px);}
-  .opt.selected{border-color:var(--neon-blue);background:rgba(65,192,255,.2);box-shadow:4px 4px 0 rgba(0,0,0,0.8);}
-
-  /* ===== CHARACTER CHIPS ===== */
-  .char-strip{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
-  .char-chip{
-    font-family:'Noto Sans KR',sans-serif;font-weight:700;font-size:var(--t-read);color:#fff;
-    background:rgba(0,0,0,.3);border:2px solid var(--neon-blue);
-    border-radius:2px;padding:8px 14px;min-width:46px;text-align:center;box-shadow:4px 4px 0 rgba(0,0,0,0.8);
-  }
-  .char-chip:nth-child(3n){border-color:var(--neon-pink);}
-  .char-chip:nth-child(3n+1){border-color:var(--neon-green);}
-
-  /* ===== SENTENCE BATCHES ===== */
-  .batch-wrap{margin-top:14px;display:flex;flex-direction:column;gap:14px;}
-  .sent-block{
-    background:var(--card-bg);border:2px solid var(--border-glow);border-radius:2px;padding:16px;box-shadow:7px 7px 0 rgba(0,0,0,0.8);
-  }
-  .sent-block:nth-child(2n){border-color:var(--neon-purple);}
-  .say-line{
-    background:rgba(255,215,0,.08);
-    border:2px solid var(--neon-yellow);border-radius:2px;
-    padding:12px 14px;margin:0 0 12px;font-size:var(--t-q);font-weight:700;color:#fff;box-shadow:4px 4px 0 rgba(0,0,0,0.8);
-    display:flex;align-items:center;gap:8px;flex-wrap:wrap;line-height:1.5;
-  }
-  .say-line b{color:var(--neon-yellow);}
-  .kw{display:flex;flex-direction:column;gap:7px;}
-  .kw-row{
-    display:flex;align-items:center;gap:10px;background:rgba(0,0,0,.3);border:2px solid rgba(255,255,255,.1);
-    border-radius:2px;padding:8px 12px;flex-wrap:wrap;
-  }
-  .kw-row .kr{
-    font-family:'Noto Sans KR',sans-serif;font-weight:700;font-size:var(--t-body);color:var(--neon-yellow);
-    background:rgba(0,0,0,.3);border:2px solid var(--border-glow);border-radius:2px;padding:3px 10px;
-  }
-  .kw-row .arrow{color:var(--neon-blue);font-weight:900;font-size:1.2rem;}
-  .kw-row .en{font-weight:600;color:var(--ink);font-size:1.1rem;}
-
-  /* ===== QR CARDS ===== */
-  .qr-gate{text-align:center;}
-  .qr-cards{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:14px;}
+  .instr b{color:var(--neon-yellow);}
+  .qr-cards{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;}
   .qr-card{
     background:var(--card-bg);border:2px solid var(--border-glow);border-radius:2px;padding:16px;
-    flex:1 1 240px;max-width:280px;box-shadow:7px 7px 0 rgba(0,0,0,0.8);
+    flex:1 1 240px;max-width:300px;box-shadow:4px 4px 0 rgba(0,0,0,0.8);text-align:center;
   }
   .qr-card.c1{border-color:var(--neon-pink);}
   .qr-card.c2{border-color:var(--neon-blue);}
-  .qr-card h3{font-family:'Press Start 2P',cursive;font-size:1.05rem;line-height:1.7;margin:0 0 8px;text-shadow:var(--retro-shadow);}
+  .qr-card h3{font-family:'Press Start 2P',cursive;font-size:.95rem;line-height:1.7;margin:0 0 8px;text-shadow:var(--retro-shadow);}
   .qr-card.c1 h3{color:var(--neon-pink);}
   .qr-card.c2 h3{color:var(--neon-blue);}
-  .qr-card .who{font-size:1.1rem;font-weight:700;color:var(--ink-soft);margin-bottom:10px;}
-  .qr-card img{width:100%;max-width:210px;height:auto;border-radius:2px;border:3px solid #fff;background:#fff;}
-  .qr-note{
-    margin-top:16px;background:rgba(104,211,145,.1);border:2px solid var(--neon-green);border-radius:2px;
-    padding:13px 15px;font-weight:600;color:var(--ink);font-size:var(--t-body);line-height:1.6;box-shadow:7px 7px 0 rgba(0,0,0,0.8);
+  .qr-card .who{font-size:1rem;font-weight:700;color:var(--ink-soft);margin-bottom:10px;}
+  .qr-slot{
+    width:100%;max-width:210px;aspect-ratio:1;margin:0 auto;border-radius:2px;border:3px dashed var(--border-glow);
+    background:rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;
+    color:var(--ink-soft);font-size:.8rem;padding:10px;text-align:center;line-height:1.5;
   }
-  .qr-note b{color:var(--neon-green);}
+  .qr-card img{width:100%;max-width:210px;height:auto;border-radius:2px;border:3px solid #fff;background:#fff;}
 
-  /* ===== STEPS / NAV ===== */
-  .step{display:none;}
-  .step.active{display:block;animation:pop .35s ease;}
-  @keyframes pop{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
+  /* ===== UPLOAD ===== */
+  .drop{
+    border:2px dashed var(--neon-blue);border-radius:2px;background:rgba(65,192,255,.06);
+    padding:26px 18px;text-align:center;cursor:pointer;transition:all .15s;box-shadow:4px 4px 0 rgba(0,0,0,0.8);
+  }
+  .drop:hover{background:rgba(65,192,255,.12);transform:translate(-1px,-1px);}
+  .drop.drag{background:rgba(65,192,255,.18);border-color:var(--neon-green);}
+  .drop .big{font-family:'Press Start 2P',cursive;font-size:.9rem;color:#fff;text-shadow:var(--retro-shadow);line-height:1.7;}
+  .drop .small{font-size:.9rem;color:var(--ink-soft);margin-top:10px;}
+  #fileInput{display:none;}
 
-  .nav{display:flex;gap:12px;margin-top:28px;align-items:center;justify-content:space-between;}
+  .rows{margin-top:18px;display:flex;flex-direction:column;gap:12px;}
+  .frow{
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+    background:rgba(0,0,0,.3);border:2px solid var(--border-glow);border-radius:2px;padding:12px 14px;
+    box-shadow:4px 4px 0 rgba(0,0,0,0.8);
+  }
+  .frow .fname{flex:1 1 200px;min-width:0;font-family:var(--vt);font-size:.95rem;color:var(--ink-soft);
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .frow .nameField{flex:1 1 200px;display:flex;align-items:center;gap:8px;}
+  .frow label{font-family:'Press Start 2P',cursive;font-size:.6rem;color:var(--neon-blue);white-space:nowrap;text-shadow:var(--retro-shadow);}
+  .frow input{
+    border:none;border-bottom:2px solid var(--border-glow);background:#0a0a1a;flex:1;min-width:0;
+    font-family:var(--vt),sans-serif;font-size:1rem;color:#fff;padding:6px 8px;outline:none;
+  }
+  .frow input:focus{border-bottom-color:var(--neon-blue);}
+  .frow input::placeholder{color:rgba(255,255,255,.35);}
+  .frow .stat{font-family:'Press Start 2P',cursive;font-size:.6rem;padding:6px 9px;border-radius:2px;white-space:nowrap;text-shadow:var(--retro-shadow);}
+  .stat.idle{background:var(--slate);color:#fff;}
+  .stat.work{background:linear-gradient(135deg,var(--neon-orange),#dd7711);color:#fff;}
+  .stat.done{background:linear-gradient(135deg,var(--neon-green),#38a169);color:#fff;}
+  .stat.err{background:linear-gradient(135deg,var(--neon-red),#cc4444);color:#fff;}
+  .xbtn{
+    background:linear-gradient(180deg,var(--neon-pink),#dd4477);color:#fff;border:none;border-radius:2px;
+    font-family:'Press Start 2P',cursive;font-size:.6rem;padding:8px 10px;cursor:pointer;text-shadow:var(--retro-shadow);
+    box-shadow:3px 3px 0 rgba(0,0,0,0.7);
+  }
+  .xbtn:hover{filter:brightness(1.1);}
+
   .btn{
     font-family:'Press Start 2P',cursive;font-size:var(--px-btn);border:none;border-radius:2px;padding:16px 26px;
-    cursor:pointer;color:#fff;text-shadow:var(--retro-shadow);
-    transition:all 0.1s;position:relative;box-shadow:6px 6px 0 rgba(0,0,0,0.7);
+    cursor:pointer;color:#fff;text-shadow:var(--retro-shadow);transition:all 0.1s;box-shadow:6px 6px 0 rgba(0,0,0,0.7);
   }
   .btn:hover:not(:disabled){transform:translate(-2px,-2px);box-shadow:8px 8px 0 rgba(0,0,0,0.7);filter:brightness(1.1);}
-  .btn:active{transform:translate(3px,3px);box-shadow:2px 2px 0 rgba(0,0,0,0.7);}
-  .btn.next{background:linear-gradient(180deg,var(--neon-blue),#0099dd);}
-  .btn.back{background:linear-gradient(180deg,#4a4a6e,#363652);}
+  .btn:active:not(:disabled){transform:translate(3px,3px);box-shadow:2px 2px 0 rgba(0,0,0,0.7);}
   .btn:disabled{opacity:.45;cursor:not-allowed;}
+  .btn.go{background:linear-gradient(180deg,var(--neon-green),#38a169);margin-top:20px;width:100%;}
+  .btn.ghost{background:linear-gradient(180deg,#4a4a6e,#363652);font-size:.8rem;padding:12px 18px;}
 
-  /* ===== FINISH ===== */
-  .finish-card{
-    text-align:center;
-    background:
-      linear-gradient(90deg,var(--neon-blue),var(--neon-pink),var(--neon-yellow)) top/100% 6px no-repeat,
-      linear-gradient(160deg,rgba(255,215,0,.14),rgba(65,192,255,.06) 55%,rgba(0,0,0,.25)),
-      var(--card-bg);
-    border:3px solid var(--neon-yellow);border-radius:2px;
-    padding:clamp(40px,7vw,64px) clamp(24px,5vw,40px);
-    box-shadow:10px 10px 0 rgba(0,0,0,0.8);
-    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
+  /* ===== DASHBOARD ===== */
+  .dash-wrap{overflow-x:auto;}
+  table.dash{width:100%;border-collapse:collapse;font-family:var(--vt);font-size:1rem;}
+  table.dash th{
+    font-family:'Press Start 2P',cursive;font-size:.62rem;color:var(--neon-yellow);text-shadow:var(--retro-shadow);
+    text-align:left;padding:12px 10px;border-bottom:2px solid var(--border-glow);white-space:nowrap;
   }
-  .finish-card h2{
-    font-family:'Press Start 2P',cursive;color:#fff;font-size:var(--px-head);line-height:1.7;margin:0;
-    text-shadow:var(--retro-shadow),5px 5px 0 rgba(0,0,0,0.6);
-  }
-  .finish-card p{color:#fff;font-size:var(--t-body);line-height:1.7;margin:0;max-width:34ch;}
+  table.dash td{padding:12px 10px;border-bottom:2px solid rgba(58,58,90,.5);color:var(--ink);vertical-align:middle;}
+  table.dash td.score{text-align:right;font-weight:700;color:var(--neon-blue);}
+  .pill{font-family:'Press Start 2P',cursive;font-size:.55rem;padding:5px 8px;border-radius:2px;text-shadow:var(--retro-shadow);white-space:nowrap;}
+  .pill.pass{background:linear-gradient(135deg,var(--neon-green),#38a169);color:#fff;}
+  .pill.fail{background:linear-gradient(135deg,var(--neon-orange),#dd7711);color:#fff;}
 
-  /* ===== PRINT BUTTON ===== */
-  .print-hint{text-align:center;margin-top:30px;}
-  .print-btn{
-    font-family:'Press Start 2P',cursive;font-size:.8rem;
-    background:linear-gradient(180deg,var(--neon-purple),#7a52cc);color:#fff;
-    border:none;border-radius:2px;padding:13px 20px;cursor:pointer;text-shadow:var(--retro-shadow);
-    transition:all 0.1s;position:relative;box-shadow:6px 6px 0 rgba(0,0,0,0.7);
+  /* ===== RESULT CARDS ===== */
+  .result{
+    background:var(--card-bg);border:2px solid var(--border-glow);border-radius:2px;
+    box-shadow:7px 7px 0 rgba(0,0,0,0.8);padding:24px 20px;margin-bottom:22px;position:relative;
   }
-  .print-btn:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 rgba(0,0,0,0.7);filter:brightness(1.1);}
-  .print-btn:active{transform:translate(3px,3px);box-shadow:2px 2px 0 rgba(0,0,0,0.7);}
+  .result.pass{border-color:var(--neon-green);}
+  .result.fail{border-color:var(--neon-orange);}
+  .result .rhead{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:6px;}
+  .result .rname{font-family:'Press Start 2P',cursive;font-size:1.0rem;color:#fff;text-shadow:var(--retro-shadow);line-height:1.6;}
+  .result .rfile{font-family:var(--vt);font-size:.9rem;color:var(--ink-soft);}
+  .result .scorebig{font-family:'Press Start 2P',cursive;font-size:1.6rem;line-height:1.4;margin:10px 0;}
+  .result.pass .scorebig{color:var(--neon-green);}
+  .result.fail .scorebig{color:var(--neon-orange);}
+  .result .label{font-family:'Press Start 2P',cursive;font-size:.7rem;color:var(--neon-yellow);text-shadow:var(--retro-shadow);margin-bottom:14px;}
+  .result audio{width:100%;margin:8px 0 16px;}
 
-  @media print{
-    body{background:#fff;color:#000;padding:0;}
-    .nav,.progress-bar,.progress-text,.print-hint,.logout-btn{display:none !important;}
-    .step{display:block !important;animation:none;page-break-inside:avoid;}
-    .card,.title-card,.qr-card,.part-head,.sent-block{box-shadow:none;}
-  }
+  .sec-h{font-family:'Press Start 2P',cursive;font-size:.72rem;color:var(--neon-blue);text-shadow:var(--retro-shadow);
+    margin:20px 0 10px;line-height:1.6;border-top:2px solid var(--border-glow);padding-top:16px;}
+  .transcript{background:rgba(0,0,0,.3);border:2px solid var(--border-glow);border-radius:2px;padding:14px;
+    font-family:'Noto Sans KR',sans-serif;font-size:1.15rem;color:#fff;line-height:1.7;}
+  .fb{font-family:'Noto Sans','Noto Sans KR',sans-serif;font-size:1.05rem;color:var(--ink);line-height:1.8;margin-bottom:10px;}
+  .fb b,.fb .kr{color:var(--neon-yellow);}
 
-  /* ===== RESPONSIVE ===== */
+  table.cats{width:100%;border-collapse:collapse;font-family:var(--vt);font-size:1rem;margin-top:6px;}
+  table.cats td{padding:8px 10px;border-bottom:2px solid rgba(58,58,90,.5);color:var(--ink);}
+  table.cats td.pts{text-align:right;font-weight:700;color:var(--neon-blue);white-space:nowrap;}
+  table.cats tr.total td{font-weight:700;color:#fff;border-top:2px solid var(--border-glow);}
+
+  .check{display:flex;flex-direction:column;gap:8px;}
+  .citem{display:flex;gap:10px;align-items:flex-start;background:rgba(0,0,0,.25);border:2px solid rgba(255,255,255,.08);
+    border-radius:2px;padding:10px 12px;}
+  .citem .ico{font-size:1.1rem;flex:0 0 auto;}
+  .citem .ctext{flex:1;}
+  .citem .creq{font-weight:700;color:#fff;font-size:1rem;}
+  .citem .cnote{font-size:.92rem;color:var(--ink-soft);margin-top:3px;line-height:1.6;font-family:'Noto Sans','Noto Sans KR',sans-serif;}
+  .corr{background:rgba(255,215,0,.07);border:2px solid var(--neon-yellow);border-radius:2px;padding:12px 14px;margin-bottom:10px;box-shadow:4px 4px 0 rgba(0,0,0,0.8);}
+  .corr .att{color:var(--neon-red);font-family:'Noto Sans KR',sans-serif;font-size:1.05rem;}
+  .corr .arrow{color:var(--neon-blue);font-weight:900;margin:0 8px;}
+  .corr .bet{color:var(--neon-green);font-family:'Noto Sans KR',sans-serif;font-size:1.05rem;font-weight:700;}
+
+  .cert-stub{margin-top:18px;}
+  .cert-stub .btn{background:linear-gradient(180deg,var(--neon-purple),#7a52cc);font-size:.78rem;padding:13px 20px;width:auto;}
+
+  .err-box{background:rgba(255,107,107,.1);border:2px solid var(--neon-red);border-radius:2px;padding:14px;color:var(--neon-red);font-weight:700;}
+
   @media(max-width:520px){
-    :root{--px-title:1.1rem;--px-head:1.0rem;--px-sub:.85rem;--px-btn:.9rem;--px-tag:.92rem;--px-counter:.85rem;--t-read:1.2rem;--t-q:1.05rem;--t-body:1.1rem;}
+    :root{--px-title:1.05rem;--px-head:1.0rem;--px-btn:.9rem;}
+    .frow .nameField,.frow .fname{flex-basis:100%;}
   }
 
-  /* ========== LOGIN GATE ========== */
+  /* ========== LOGIN GATE (Calvin's Teams pattern) ========== */
   .gate-overlay{
     position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;
     background:url('https://cdn.shopify.com/s/files/1/0674/6747/7282/files/sky.png?v=1750990355') repeat;
@@ -296,8 +213,7 @@
     background:
       linear-gradient(90deg,var(--neon-blue),var(--neon-pink),var(--neon-yellow)) top/100% 6px no-repeat,
       var(--card-bg);
-    border:3px solid var(--neon-blue);border-radius:2px;
-    box-shadow:10px 10px 0 rgba(0,0,0,0.8);
+    border:3px solid var(--neon-blue);border-radius:2px;box-shadow:10px 10px 0 rgba(0,0,0,0.8);
     padding:clamp(24px,5vw,50px) clamp(18px,4vw,36px);max-width:600px;width:100%;text-align:center;
   }
   .gate-card h1{font-size:clamp(.95rem,3.5vw,1.3rem);line-height:1.7;margin:0 0 clamp(14px,2.5vw,22px);}
@@ -313,21 +229,16 @@
   }
   .gate-field input:focus{border-bottom-color:var(--neon-blue);}
   .gate-field input::placeholder{color:rgba(255,255,255,.35);}
-  /* prevent Chrome/Safari autofill from forcing a white/yellow background */
   .gate-field input:-webkit-autofill,
   .gate-field input:-webkit-autofill:hover,
   .gate-field input:-webkit-autofill:focus{
-    -webkit-text-fill-color:#fff;
-    -webkit-box-shadow:0 0 0 1000px #0a0a1a inset;
-    box-shadow:0 0 0 1000px #0a0a1a inset;
-    caret-color:#fff;
-    transition:background-color 9999s ease-in-out 0s;
+    -webkit-text-fill-color:#fff;-webkit-box-shadow:0 0 0 1000px #0a0a1a inset;box-shadow:0 0 0 1000px #0a0a1a inset;
+    caret-color:#fff;transition:background-color 9999s ease-in-out 0s;
   }
   .gate-btn{
     font-family:'Press Start 2P',cursive;font-size:clamp(.72rem,2.2vw,.95rem);border:none;border-radius:2px;padding:clamp(15px,3vw,22px) clamp(20px,4vw,30px);
     cursor:pointer;color:#fff;text-shadow:var(--retro-shadow);width:100%;margin-top:10px;
-    background:linear-gradient(180deg,var(--neon-green),#38a169);
-    transition:all 0.1s;position:relative;box-shadow:6px 6px 0 rgba(0,0,0,0.7);
+    background:linear-gradient(180deg,var(--neon-green),#38a169);transition:all 0.1s;box-shadow:6px 6px 0 rgba(0,0,0,0.7);
   }
   .gate-btn:hover:not(:disabled){transform:translate(-2px,-2px);box-shadow:8px 8px 0 rgba(0,0,0,0.7);filter:brightness(1.1);}
   .gate-btn:active{transform:translate(3px,3px);box-shadow:2px 2px 0 rgba(0,0,0,0.7);}
@@ -341,7 +252,6 @@
   }
   .logout-btn:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 rgba(0,0,0,0.7);filter:brightness(1.1);}
   .logout-btn:active{transform:translate(3px,3px);box-shadow:2px 2px 0 rgba(0,0,0,0.7);}
-
 </style>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -353,7 +263,7 @@
 <!-- ===== LOGIN GATE ===== -->
 <div class="gate-overlay" id="gate">
   <div class="gate-card">
-    <h1>Korean Speaking Test</h1>
+    <h1>Speaking Test Grader</h1>
     <div class="sub">Log in with your KoreanLearnin Teams account to continue.</div>
     <div class="gate-field"><label>Email</label><input type="email" id="gEmail" autocomplete="username" placeholder="your email"></div>
     <div class="gate-field"><label>Password</label><input type="password" id="gPass" autocomplete="current-password" placeholder="your password"></div>
@@ -362,59 +272,132 @@
   </div>
 </div>
 
-<!-- ===== APP (hidden until login) ===== -->
+<!-- ===== APP ===== -->
 <div id="appWrap">
 <button class="logout-btn" id="logoutBtn">Log out</button>
 <div class="wrap">
+
   <div class="title-card">
-    <h1>Novice Korean<br>Speaking Test</h1>
+    <h1>Korean Speaking<br>Test Grader</h1>
+    <div class="sub">AI transcribe + grade · Discord .OGG uploads</div>
   </div>
-  <div class="progress-bar"><div class="progress-fill" id="bar"></div></div>
-  <div class="progress-text ptext-label" id="ptext"></div>
 
-  <!-- content steps injected here from Firestore -->
-  <div id="stepHost"></div>
+  <!-- QR (collapsible, student-facing reference) -->
+  <div class="panel" id="qrPanel">
+    <h2 class="collapser" id="qrToggle"><span><span class="em">▸</span> Student QR Codes</span><span class="chev">▸</span></h2>
+    <div class="qr-body">
+      <div class="instr">
+        Before you record your Korean speaking test in Discord, scan the QR codes below. These will help you
+        understand what to say and how to complete your speaking mission. After reviewing them, record your
+        voice message in Discord. Your teacher will download it as a <b>.OGG</b> file and upload it here for AI grading.
+      </div>
+      <div class="qr-cards">
+        <div class="qr-card c1">
+          <h3>Speaking Test<br>Instructions</h3>
+          <div class="who">Scan to review what your Korean paragraph should include.</div>
+          <!-- Paste your Voice 1 QR: replace the slot div below with <img src="data:image/png;base64,...."> -->
+          <div class="qr-slot" id="qr1">Paste Voice 1 QR here<br>(base64 img)</div>
+        </div>
+        <div class="qr-card c2">
+          <h3>Recording Help<br>/ Example</h3>
+          <div class="who">Scan for help before recording your voice message in Discord.</div>
+          <!-- Paste your Voice 2 QR here -->
+          <div class="qr-slot" id="qr2">Paste Voice 2 QR here<br>(base64 img)</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <div class="nav">
-    <button class="btn back" id="backBtn">← Back</button>
-    <span class="progress-text" id="counter"></span>
-    <button class="btn next" id="nextBtn">Next →</button>
+  <!-- Upload -->
+  <div class="panel">
+    <h2><span class="em">1.</span> Upload Recordings</h2>
+    <div class="drop" id="drop">
+      <div class="big">+ Drop .OGG files</div>
+      <div class="small">or click to choose · multiple files OK · one file = one student</div>
+    </div>
+    <input type="file" id="fileInput" accept=".ogg,audio/ogg" multiple>
+    <div class="rows" id="rows"></div>
+    <button class="btn go" id="gradeBtn" disabled>Grade All</button>
   </div>
-  <div class="print-hint">
-    <button class="print-btn" onclick="window.print()">🖨 Print this test</button>
+
+  <!-- Dashboard -->
+  <div class="panel" id="dashPanel" style="display:none;">
+    <h2><span class="em">2.</span> Results Dashboard</h2>
+    <div class="dash-wrap">
+      <table class="dash">
+        <thead><tr><th>Student</th><th>File</th><th>Score</th><th>Status</th><th>Certificate</th></tr></thead>
+        <tbody id="dashBody"></tbody>
+      </table>
+    </div>
   </div>
+
+  <!-- Result cards -->
+  <div id="results"></div>
+
 </div>
 </div>
 
 <script>
-  // ---------- Grab gate elements + wire the button FIRST ----------
-  // (Done before anything that could throw, so the Enter button is ALWAYS live.)
+/* ============================================================
+   CONFIG  — set your two Cloud Function URLs here.
+   whisperProxy URL is filled in. For openaiProxy, paste the URL
+   you already call from shorts.html, OR run:
+     gcloud functions describe openaiProxy --region=us-central1 --gen2 \
+       --format="value(serviceConfig.uri)"
+   ============================================================ */
+  const WHISPER_URL = "https://whisperproxy-2rv6vh2fhq-uc.a.run.app";
+  const OPENAI_URL  = "https://openaiproxy-REPLACE-ME-uc.a.run.app";  // <-- paste your openaiProxy URL
+  const GRADER_MODEL = "gpt-4o";
+  const PASS_MARK = 70;
+
+/* ---------- The 15 canonical requirements (fixed; AI only fills status+notes) ---------- */
+  const REQUIREMENTS = [
+    "Dual noun possession (DNP, e.g. 엄마 집)",
+    "Student name",
+    "Friend's name",
+    "Student profession",
+    "Friend profession",
+    "Student hobby (gerund + 좋아해요/싫어해요)",
+    "Friend hobby (gerund + 좋아해요/싫어해요)",
+    "What they like to do at a place",
+    "Friend likes/dislikes (좋아하는 거 같아요 / 싫어하는 거 같아요)",
+    "Weekend activity",
+    "Favorite activity location — present tense",
+    "Favorite activity location — past tense",
+    "Speaks directly to the listener",
+    "같이 invitation",
+    "Ends with a question"
+  ];
+
+  function resultLabel(score){
+    if(score>=90) return "Excellent Speaker";
+    if(score>=80) return "Strong Korean Communicator";
+    if(score>=70) return "Passed — Keep Growing";
+    if(score>=60) return "Almost There";
+    return "Needs More Practice";
+  }
+
+/* ---------- gate elements + wire button FIRST (never killed by a later throw) ---------- */
   const gate = document.getElementById('gate');
   const appWrap = document.getElementById('appWrap');
   const gBtn = document.getElementById('gBtn');
   const gErr = document.getElementById('gErr');
   const gEmail = document.getElementById('gEmail');
   const gPass = document.getElementById('gPass');
-
-  let booted = false;
-  let auth = null, db = null;
-
-  function showErr(msg){ gErr.textContent = msg; }
+  let auth = null;
+  function showErr(m){ gErr.textContent = m; }
 
   async function doLogin(){
     showErr('');
     if(!auth){ showErr('Still loading — try again in a moment.'); return; }
-    const email = gEmail.value.trim();
-    const pass = gPass.value;
+    const email = gEmail.value.trim(), pass = gPass.value;
     if(!email || !pass){ showErr('Please enter your email and password.'); return; }
     gBtn.disabled = true; gBtn.textContent = 'Checking…';
-    try {
-      await auth.signInWithEmailAndPassword(email, pass);
-      // onAuthStateChanged handles the rest
-    } catch(e){
+    try { await auth.signInWithEmailAndPassword(email, pass); }
+    catch(e){
       gBtn.disabled = false; gBtn.textContent = 'Enter';
       const map = {
-        'auth/invalid-email':'That email doesn\'t look right.',
+        'auth/invalid-email':"That email doesn't look right.",
         'auth/user-not-found':'No account found with that email.',
         'auth/wrong-password':'Wrong password — try again.',
         'auth/invalid-credential':'Email or password is incorrect.',
@@ -424,189 +407,343 @@
       showErr(map[e.code] || ('Could not log in: ' + (e.code||e.message||e)));
     }
   }
-
-  // Attach handlers immediately — these can never be killed by a later error.
   gBtn.onclick = doLogin;
   gPass.addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
   gEmail.addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
 
-  // ---------- Firebase init (guarded) ----------
+/* ---------- guarded firebase init ---------- */
   if(typeof firebase === 'undefined'){
     showErr('Could not load the login service. Refresh the page.');
   } else {
     try {
-      const firebaseConfig = {
-        apiKey: "AIzaSyBismf9dfYPRPZdimmhZyqxecQnwSL4O8M",
-        authDomain: "koreanlearnin-teams.firebaseapp.com",
-        projectId: "koreanlearnin-teams",
-        storageBucket: "koreanlearnin-teams.firebasestorage.app",
-        messagingSenderId: "437370841898",
-        appId: "1:437370841898:web:6c329a30956d4170a60c53"
-      };
-      firebase.initializeApp(firebaseConfig);
+      firebase.initializeApp({
+        apiKey:"AIzaSyBismf9dfYPRPZdimmhZyqxecQnwSL4O8M",
+        authDomain:"koreanlearnin-teams.firebaseapp.com",
+        projectId:"koreanlearnin-teams",
+        storageBucket:"koreanlearnin-teams.firebasestorage.app",
+        messagingSenderId:"437370841898",
+        appId:"1:437370841898:web:6c329a30956d4170a60c53"
+      });
       auth = firebase.auth();
-      db = firebase.firestore();
       const lo = document.getElementById('logoutBtn');
       if(lo) lo.onclick = ()=> auth.signOut();
-      initAuthWatcher();
-    } catch(e){
-      showErr('Login service error: ' + (e.message||e));
-    }
-  }
-
-  function initAuthWatcher(){
-  auth.onAuthStateChanged(async user=>{
-    if(user){
-      gBtn.disabled = false; gBtn.textContent = 'Enter';
-      if(!booted){
-        try {
-          await loadTest();
-          booted = true;
-        } catch(e){
-          showErr('Logged in, but the test failed to load: ' + (e.message||e));
-          return;
+      auth.onAuthStateChanged(user=>{
+        if(user){
+          gBtn.disabled = false; gBtn.textContent = 'Enter';
+          gate.style.display='none'; appWrap.style.display='block';
+        } else {
+          appWrap.style.display='none'; gate.style.display='flex';
         }
+      });
+    } catch(e){ showErr('Login service error: ' + (e.message||e)); }
+  }
+
+/* ---------- QR collapser ---------- */
+  document.getElementById('qrToggle').onclick = ()=>{
+    document.getElementById('qrPanel').classList.toggle('open');
+  };
+
+/* ============================================================
+   STATE: one object per student. Never re-sorted in a way that
+   detaches name <-> file <-> transcript <-> score.
+   ============================================================ */
+  let students = [];   // {id, file, name, audioUrl, status, result|null, error|null}
+  let uid = 0;
+
+  const rowsEl = document.getElementById('rows');
+  const gradeBtn = document.getElementById('gradeBtn');
+  const drop = document.getElementById('drop');
+  const fileInput = document.getElementById('fileInput');
+
+  function guessName(filename){
+    return filename.replace(/\.[^.]+$/,'').replace(/[_-]+/g,' ').trim();
+  }
+
+  function addFiles(fileList){
+    Array.from(fileList).forEach(f=>{
+      if(!/\.ogg$/i.test(f.name) && f.type!=='audio/ogg') return;
+      students.push({
+        id:++uid, file:f, name:guessName(f.name),
+        audioUrl:URL.createObjectURL(f), status:'idle', result:null, error:null
+      });
+    });
+    renderRows();
+  }
+
+  function renderRows(){
+    rowsEl.innerHTML='';
+    students.forEach(s=>{
+      const row=document.createElement('div'); row.className='frow';
+      row.innerHTML=`
+        <div class="fname" title="${s.file.name}">🎵 ${s.file.name}</div>
+        <div class="nameField"><label>Name</label>
+          <input type="text" placeholder="student name" value="${s.name.replace(/"/g,'&quot;')}"></div>
+        <span class="stat ${statClass(s.status)}">${statText(s.status)}</span>
+        <button class="xbtn" title="remove">✕</button>`;
+      row.querySelector('input').addEventListener('input',e=>{ s.name=e.target.value; });
+      row.querySelector('.xbtn').onclick=()=>{
+        URL.revokeObjectURL(s.audioUrl);
+        students=students.filter(x=>x.id!==s.id);
+        renderRows();
+      };
+      rowsEl.appendChild(row);
+    });
+    gradeBtn.disabled = students.length===0;
+    gradeBtn.textContent = students.length ? `Grade All (${students.length})` : 'Grade All';
+  }
+  function statClass(s){ return s==='idle'?'idle': s==='done'?'done': s==='err'?'err':'work'; }
+  function statText(s){
+    return s==='idle'?'Ready': s==='transcribing'?'Transcribing…': s==='grading'?'Grading…':
+           s==='done'?'Done': s==='err'?'Error':'…';
+  }
+  function setStatus(s,st){ s.status=st; const idx=students.indexOf(s);
+    const node=rowsEl.children[idx]; if(node){ const tag=node.querySelector('.stat');
+      tag.className='stat '+statClass(st); tag.textContent=statText(st); } }
+
+  drop.onclick=()=>fileInput.click();
+  fileInput.onchange=e=>{ addFiles(e.target.files); fileInput.value=''; };
+  ['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('drag');}));
+  ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('drag');}));
+  drop.addEventListener('drop',e=>{ if(e.dataTransfer?.files) addFiles(e.dataTransfer.files); });
+
+/* ============================================================
+   AI CALLS
+   ============================================================ */
+  async function getToken(){
+    const u = auth && auth.currentUser;
+    if(!u) throw new Error('Not logged in');
+    return await u.getIdToken();
+  }
+
+  // 1) raw .ogg bytes -> whisperProxy -> Korean transcript
+  async function transcribeAudio(file){
+    const token = await getToken();
+    const r = await fetch(WHISPER_URL, {
+      method:'POST',
+      headers:{ 'Authorization':'Bearer '+token, 'Content-Type':'application/octet-stream', 'X-Filename':file.name },
+      body:file
+    });
+    const data = await r.json();
+    if(!r.ok) throw new Error(data.error || ('Transcription failed ('+r.status+')'));
+    if(!data.text) throw new Error('Transcription returned no text');
+    return data.text;
+  }
+
+  // 2) transcript -> openaiProxy (chat completions, JSON mode) -> structured grade
+  async function gradeTranscript(transcript, studentName){
+    const token = await getToken();
+    const sys = "You are a kind but accurate Korean speaking test grader for KoreanLearnin. You return ONLY valid JSON, no markdown.";
+    const user = buildGradingPrompt(transcript, studentName);
+    const body = {
+      model: GRADER_MODEL,
+      temperature: 0.4,
+      response_format: { type: "json_object" },
+      messages: [ {role:"system",content:sys}, {role:"user",content:user} ]
+    };
+    const r = await fetch(OPENAI_URL, {
+      method:'POST',
+      headers:{ 'Authorization':'Bearer '+token, 'Content-Type':'application/json' },
+      body: JSON.stringify(body)
+    });
+    const data = await r.json();
+    if(!r.ok) throw new Error((data.error && (data.error.message||data.error)) || ('Grading failed ('+r.status+')'));
+    const content = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+    if(!content) throw new Error('Grader returned an empty response');
+    return parseGrade(content);
+  }
+
+  function parseGrade(text){
+    let t = String(text).trim().replace(/^```json/i,'').replace(/^```/,'').replace(/```$/,'').trim();
+    let g;
+    try { g = JSON.parse(t); }
+    catch(e){ const m=t.match(/\{[\s\S]*\}/); if(m){ g=JSON.parse(m[0]); } else throw new Error('Could not parse grader JSON'); }
+    // derive label + pass from the score so they always agree with PASS_MARK
+    const score = Math.max(0, Math.min(100, Math.round(Number(g.finalScore)||0)));
+    g.finalScore = score;
+    g.passed = score >= PASS_MARK;
+    g.resultLabel = resultLabel(score);
+    g.checklist = Array.isArray(g.checklist) ? g.checklist : [];
+    g.suggestedCorrections = Array.isArray(g.suggestedCorrections) ? g.suggestedCorrections : [];
+    g.feedback = g.feedback || {};
+    g.categoryScores = g.categoryScores || {};
+    return g;
+  }
+
+  function buildGradingPrompt(transcript, name){
+    return `Grade this student's Korean speaking test.
+
+STUDENT NAME: ${name||'(unknown)'}
+TRANSCRIPT (from speech-to-text of their Korean voice recording):
+"""${transcript}"""
+
+The paragraph was supposed to include: DNP/dual noun possession (e.g. 엄마 집); their name and their friend's name; their profession and their friend's profession; their hobby and friend's hobby using a gerund + 좋아해요/싫어해요; what they like to do at a place; what they think their friend likes/dislikes using 좋아하는 거 같아요 / 싫어하는 거 같아요; a weekend activity; where their favorite activity is or was (present AND past tense); a sentence speaking directly to the listener; a 같이 invitation; and a final question.
+
+GRADING (0-100): Required Content & Grammar 40, Understandability 25, Sentence Completion 15, Pronunciation Clarity 10, Flow & Confidence 10. Passing is ${PASS_MARK}+.
+This is a TRANSCRIPT from speech-to-text, so do NOT grade pronunciation strictly — judge whether the required ideas were communicated and understandable. Only lower understandability/pronunciation if important parts are clearly garbled or missing.
+
+Feedback must be LONG, specific, and reference the student's ACTUAL words from the transcript (their name, friend's name, professions, hobbies, weekend, places, favorite activity, 같이 invitation, final question — only the ones they actually included). Give praise first. Be kind, but mark missing items clearly and show how to fix them next time.
+
+Return ONLY a JSON object with EXACTLY this shape:
+{
+  "finalScore": <0-100 integer>,
+  "categoryScores": {
+    "requiredContentGrammar": {"score": <0-40>, "max": 40},
+    "understandability": {"score": <0-25>, "max": 25},
+    "sentenceCompletion": {"score": <0-15>, "max": 15},
+    "pronunciationClarity": {"score": <0-10>, "max": 10},
+    "flowConfidence": {"score": <0-10>, "max": 10}
+  },
+  "checklist": [
+    { "requirement": "<one of the 15 below, IN THIS ORDER>", "status": "included" | "partial" | "missing", "note": "<reference what the student said, or what was missing>" }
+  ],
+  "feedback": {
+    "overallPraise": "<make them proud, mention something specific they said>",
+    "didCorrectly": "<detailed, references their actual story>",
+    "excelled": "<their strongest parts>",
+    "needsWork": "<specific and kind; what was missing/unclear and how to fix>"
+  },
+  "suggestedCorrections": [ { "attempted": "<what student said>", "better": "<improved Korean sentence>" } ],
+  "passExplanation": "<why they passed, or what to add to pass next time>",
+  "closing": "<encouraging final message>",
+  "certificate": { "praise": "<positive accomplishment-only praise>", "growthNotes": "<gentle next steps, kind language>" }
+}
+
+The "checklist" array MUST contain exactly these 15 items, in this exact order:
+${REQUIREMENTS.map((r,i)=>`${i+1}. ${r}`).join('\n')}`;
+  }
+
+/* ============================================================
+   RUN: sequential (avoids rate spikes; per-student errors don't kill the batch)
+   ============================================================ */
+  gradeBtn.onclick = async ()=>{
+    if(!students.length) return;
+    gradeBtn.disabled = true; gradeBtn.textContent = 'Grading…';
+    document.getElementById('dashPanel').style.display='block';
+    renderDash();
+    for(const s of students){
+      try{
+        setStatus(s,'transcribing');
+        const transcript = await transcribeAudio(s.file);
+        setStatus(s,'grading');
+        const grade = await gradeTranscript(transcript, s.name);
+        grade.transcript = transcript;
+        s.result = grade; s.error=null; setStatus(s,'done');
+      }catch(err){
+        s.error = err.message||String(err); s.result=null; setStatus(s,'err');
       }
-      gate.style.display = 'none';
-      appWrap.style.display = 'block';
-    } else {
-      appWrap.style.display = 'none';
-      gate.style.display = 'flex';
+      renderDash(); renderResults();
     }
-  });
+    gradeBtn.disabled = false; gradeBtn.textContent = `Grade All (${students.length})`;
+  };
+
+/* ---------- renderers ---------- */
+  function renderDash(){
+    const body=document.getElementById('dashBody'); body.innerHTML='';
+    students.forEach(s=>{
+      const tr=document.createElement('tr');
+      let score='—', status='<span class="stat work">'+statText(s.status)+'</span>', cert='—';
+      if(s.error){ status='<span class="pill fail">Error</span>'; }
+      else if(s.result){
+        const g=s.result; score=g.finalScore+'%';
+        status=`<span class="pill ${g.passed?'pass':'fail'}">${g.resultLabel}</span>`;
+        cert = g.passed ? '<span class="pill pass">Eligible</span>' : 'Not eligible';
+      }
+      tr.innerHTML=`<td>${escapeHtml(s.name||'(unnamed)')}</td>
+        <td>${escapeHtml(s.file.name)}</td>
+        <td class="score">${score}</td><td>${status}</td><td>${cert}</td>`;
+      body.appendChild(tr);
+    });
   }
 
-  // ---------- Load test content from Firestore, then build ----------
-  async function loadTest(){
-    const snap = await db.collection('speakingTests').doc('novice-v1').get();
-    if(!snap.exists) throw new Error('test content not found');
-    const data = snap.data();
-    const steps = data.steps || [];
-    const host = document.getElementById('stepHost');
-    host.innerHTML = '';
-    steps.forEach(st=>{
-      const div = document.createElement('div');
-      div.className = 'step';
-      if(st.shuffle) div.setAttribute('data-shuffle', st.shuffle);
-      if(st.label) div.setAttribute('data-label', st.label);
-      div.innerHTML = st.html;
-      host.appendChild(div);
+  function renderResults(){
+    const host=document.getElementById('results'); host.innerHTML='';
+    students.forEach(s=>{
+      if(!s.result && !s.error) return;
+      const card=document.createElement('div');
+      if(s.error){
+        card.className='result fail';
+        card.innerHTML=`<div class="rhead"><span class="rname">${escapeHtml(s.name||'(unnamed)')}</span>
+          <span class="rfile">${escapeHtml(s.file.name)}</span></div>
+          <audio controls src="${s.audioUrl}"></audio>
+          <div class="err-box">Could not grade this recording: ${escapeHtml(s.error)}</div>`;
+        host.appendChild(card); return;
+      }
+      const g=s.result;
+      card.className='result '+(g.passed?'pass':'fail');
+      card.innerHTML = resultHtml(s,g);
+      host.appendChild(card);
     });
-    initTest();
+    // wire growth-notes stub toggles
+    host.querySelectorAll('[data-growth]').forEach(btn=>{
+      btn.onclick=()=>{ const el=btn.nextElementSibling; el.style.display = el.style.display==='block'?'none':'block'; };
+    });
   }
 
-  // ---------- Original test logic (runs after injection) ----------
-  function shuffle(arr){
-    for(let i=arr.length-1;i>0;i--){
-      const j=Math.floor(Math.random()*(i+1));
-      [arr[i],arr[j]]=[arr[j],arr[i]];
-    }
-    return arr;
+  function catRow(label, c){
+    if(!c) return '';
+    const score = (c.score!=null?c.score:'—'), max=(c.max!=null?c.max:'');
+    return `<tr><td>${label}</td><td class="pts">${score} / ${max}</td></tr>`;
   }
 
-  function initTest(){
-    // 1) Shuffle MC option order within each MC question + relabel A-D
-    document.querySelectorAll('.shuffle-opts').forEach(group=>{
-      const opts=Array.from(group.children);
-      shuffle(opts);
-      const letters=['A','B','C','D'];
-      opts.forEach((o,idx)=>{
-        o.querySelector('.letter').textContent=letters[idx]||'';
-        group.appendChild(o);
-      });
-    });
+  function checkIcon(st){ return st==='included'?'✅': st==='partial'?'⚠️':'❌'; }
 
-    // 2) Shuffle the ORDER of the practice MC question steps among themselves
-    const allSteps = Array.from(document.querySelectorAll('.step'));
-    const mcSteps = allSteps.filter(s=>s.dataset.shuffle==='mc');
-    if(mcSteps.length){
-      const anchor = document.querySelector('.step[data-shuffle="practice-speak"]');
-      shuffle(mcSteps.slice()).forEach(s=>anchor.parentNode.insertBefore(s, anchor));
-    }
-    document.querySelectorAll('.mc-tag').forEach((tag,i)=>{ tag.textContent='Practice '+(i+1); });
+  function resultHtml(s,g){
+    const cs=g.categoryScores||{};
+    const cats = catRow('Required Content & Grammar',cs.requiredContentGrammar)
+      + catRow('Understandability',cs.understandability)
+      + catRow('Sentence Completion',cs.sentenceCompletion)
+      + catRow('Pronunciation Clarity',cs.pronunciationClarity)
+      + catRow('Flow & Confidence',cs.flowConfidence)
+      + `<tr class="total"><td>Total</td><td class="pts">${g.finalScore} / 100</td></tr>`;
 
-    // 3) Shuffle character chips within each Part 1 strip
-    document.querySelectorAll('.shuffle-chars').forEach(strip=>{
-      const chips=Array.from(strip.children);
-      shuffle(chips).forEach(c=>strip.appendChild(c));
-    });
+    const checklist = (g.checklist||[]).map(c=>`
+      <div class="citem"><span class="ico">${checkIcon(c.status)}</span>
+        <div class="ctext"><div class="creq">${escapeHtml(c.requirement||'')}</div>
+          ${c.note?`<div class="cnote">${escapeHtml(c.note)}</div>`:''}</div></div>`).join('');
 
-    // 4) Shuffle sentence blocks within each batch
-    document.querySelectorAll('.shuffle-blocks').forEach(wrap=>{
-      const blocks=Array.from(wrap.children);
-      shuffle(blocks).forEach(b=>wrap.appendChild(b));
-    });
+    const corrections = (g.suggestedCorrections||[]).map(c=>`
+      <div class="corr"><span class="att">${escapeHtml(c.attempted||'')}</span>
+        <span class="arrow">→</span><span class="bet">${escapeHtml(c.better||'')}</span></div>`).join('');
 
-    // ---- Navigation ----
-    const steps = Array.from(document.querySelectorAll('.step'));
-    let cur = 0;
-    const bar = document.getElementById('bar');
-    const ptext = document.getElementById('ptext');
-    const counter = document.getElementById('counter');
-    const backBtn = document.getElementById('backBtn');
-    const nextBtn = document.getElementById('nextBtn');
+    const fb=g.feedback||{};
+    const certStub = g.passed ? `
+      <div class="cert-stub">
+        <button class="btn" disabled title="Certificate generation coming next">🏆 Generate Certificate (coming soon)</button>
+      </div>` : '';
 
-    const host = document.getElementById('stepHost');
-    const nav = document.querySelector('.nav');
-    const printHint = document.querySelector('.print-hint');
-    let firstRender = true;
+    return `
+      <div class="rhead"><span class="rname">${escapeHtml(s.name||'(unnamed)')}</span>
+        <span class="rfile">${escapeHtml(s.file.name)}</span></div>
+      <div class="scorebig">${g.finalScore}%</div>
+      <div class="label">${escapeHtml(g.resultLabel)} · ${g.passed?'PASSED':'Not passed yet'}</div>
+      <audio controls src="${s.audioUrl}"></audio>
 
-    // FLIP: glide the nav (and the Print button below it) from their previous Y
-    // to their new Y after content swaps. This reads REAL layout after the swap,
-    // so async content (e.g. QR images) can't desync it, and it never locks height.
-    function flipNav(prevTop){
-      const newTop = nav.getBoundingClientRect().top;
-      const delta = prevTop - newTop;
-      if(Math.abs(delta) < 1) return; // nothing meaningful to animate
-      const opts = { duration: 320, easing: 'ease' };
-      const frames = [{ transform: `translateY(${delta}px)` }, { transform: 'translateY(0)' }];
-      // animate nav and the Print button together so they move as one unit
-      nav.animate(frames, opts);
-      if(printHint) printHint.animate(frames, opts);
-    }
+      <div class="sec-h">Transcript</div>
+      <div class="transcript">${escapeHtml(g.transcript||'')}</div>
 
-    function render(){
-      // capture nav position BEFORE the content swap
-      const prevTop = nav.getBoundingClientRect().top;
+      <div class="sec-h">Score Breakdown</div>
+      <table class="cats">${cats}</table>
 
-      steps.forEach((s,i)=>s.classList.toggle('active', i===cur));
-      const pct = Math.round(((cur+1)/steps.length)*100);
-      bar.style.width = pct + '%';
-      ptext.textContent = steps[cur].dataset.label || '';
-      counter.textContent = (cur+1) + ' / ' + steps.length;
-      backBtn.disabled = cur===0;
-      nextBtn.textContent = 'Next →';
-      // hide Next entirely on the last step (no Done button)
-      nextBtn.style.visibility = (cur===steps.length-1) ? 'hidden' : 'visible';
-      window.scrollTo({top:0,behavior:'smooth'});
+      <div class="sec-h">Requirement Checklist</div>
+      <div class="check">${checklist || '<div class="fb">No checklist returned.</div>'}</div>
 
-      if(firstRender){ firstRender = false; return; }
+      <div class="sec-h">Feedback</div>
+      ${fb.overallPraise?`<div class="fb"><b>Overall:</b> ${escapeHtml(fb.overallPraise)}</div>`:''}
+      ${fb.didCorrectly?`<div class="fb"><b>What you did well:</b> ${escapeHtml(fb.didCorrectly)}</div>`:''}
+      ${fb.excelled?`<div class="fb"><b>Where you excelled:</b> ${escapeHtml(fb.excelled)}</div>`:''}
+      ${fb.needsWork?`<div class="fb"><b>Where to keep working:</b> ${escapeHtml(fb.needsWork)}</div>`:''}
 
-      // animate after layout settles for this frame
-      requestAnimationFrame(()=> flipNav(prevTop));
+      ${corrections?`<div class="sec-h">Suggested Corrections</div>${corrections}`:''}
 
-      // if the new step has images that load late and shift the nav, re-settle it.
-      const imgs = steps[cur].querySelectorAll('img');
-      imgs.forEach(img=>{
-        if(img.complete) return;
-        const beforeTop = nav.getBoundingClientRect().top;
-        img.addEventListener('load', ()=> flipNav(beforeTop), { once:true });
-        img.addEventListener('error', ()=> flipNav(beforeTop), { once:true });
-      });
-    }
-    nextBtn.onclick = ()=>{ if(cur<steps.length-1){cur++;render();} };
-    backBtn.onclick = ()=>{ if(cur>0){cur--;render();} };
+      ${g.passExplanation?`<div class="sec-h">Pass / Fail</div><div class="fb">${escapeHtml(g.passExplanation)}</div>`:''}
+      ${g.closing?`<div class="fb" style="color:var(--neon-green);margin-top:10px;">${escapeHtml(g.closing)}</div>`:''}
 
-    document.querySelectorAll('.options').forEach(group=>{
-      group.querySelectorAll('.opt').forEach(opt=>{
-        opt.onclick = ()=>{
-          group.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
-          opt.classList.add('selected');
-        };
-      });
-    });
+      ${certStub}
+    `;
+  }
 
-    render();
+  function escapeHtml(str){
+    return String(str==null?'':str).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   }
 </script>
 </body>
