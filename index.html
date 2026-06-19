@@ -196,6 +196,74 @@
 
   .cert-stub{margin-top:18px;}
   .cert-stub .btn{background:linear-gradient(180deg,var(--neon-purple),#7a52cc);font-size:.78rem;padding:13px 20px;width:auto;}
+  .cert-stub .btn:disabled{background:var(--slate);}
+
+  /* ===== CERTIFICATE MODAL ===== */
+  .cert-overlay{
+    position:fixed;inset:0;z-index:200;display:none;align-items:flex-start;justify-content:center;
+    background:rgba(8,8,20,.82);padding:24px 14px;overflow-y:auto;
+  }
+  .cert-overlay.show{display:flex;}
+  .cert-modal{position:relative;max-width:880px;width:100%;margin:auto;}
+  .cert-close{
+    position:absolute;top:-6px;right:-6px;z-index:5;font-family:'Press Start 2P',cursive;font-size:.7rem;
+    background:linear-gradient(180deg,var(--neon-pink),#dd4477);color:#fff;border:none;border-radius:2px;
+    padding:10px 12px;cursor:pointer;text-shadow:var(--retro-shadow);box-shadow:4px 4px 0 rgba(0,0,0,0.7);
+  }
+  .cert-actions{display:flex;gap:12px;justify-content:center;margin:18px 0 8px;flex-wrap:wrap;}
+  .cert-dl{background:linear-gradient(180deg,var(--neon-green),#38a169);width:auto;}
+
+  /* the certificate face — used both on-screen and (cloned) for PDF capture */
+  .cert-face{
+    background:
+      linear-gradient(90deg,var(--neon-blue),var(--neon-pink),var(--neon-yellow)) top/100% 8px no-repeat,
+      linear-gradient(160deg,rgba(255,215,0,.10),rgba(65,192,255,.05) 55%,rgba(20,20,40,.9)),
+      linear-gradient(180deg,#23233f 0%,#1c1c34 100%);
+    border:3px solid var(--neon-yellow);border-radius:2px;
+    padding:40px 38px 34px;color:#fff;position:relative;text-align:center;
+  }
+  .cert-face .brand{font-family:'Press Start 2P',cursive;font-size:.72rem;color:var(--neon-blue);text-shadow:var(--retro-shadow);letter-spacing:1px;}
+  .cert-face .ctitle{font-family:'Press Start 2P',cursive;font-size:1.15rem;line-height:1.7;color:#fff;
+    text-shadow:var(--retro-shadow),4px 4px 0 rgba(0,0,0,0.5);margin:16px 0 6px;}
+  .cert-face .award-to{font-size:.95rem;color:var(--ink-soft);margin:18px 0 4px;letter-spacing:2px;text-transform:uppercase;}
+  .cert-face .sname{font-family:'Press Start 2P',cursive;font-size:1.3rem;color:var(--neon-yellow);text-shadow:var(--retro-shadow);line-height:1.6;margin-bottom:18px;}
+  .cert-face .cbody{font-family:'Noto Sans','Noto Sans KR',sans-serif;font-size:1.02rem;line-height:1.8;color:var(--ink);max-width:60ch;margin:0 auto 18px;}
+  .cert-face .cbody .kr{color:var(--neon-yellow);font-weight:700;}
+  .cert-face .praise{font-family:'Noto Sans','Noto Sans KR',sans-serif;font-size:1.0rem;line-height:1.8;color:#fff;
+    background:rgba(104,211,145,.08);border:2px solid var(--neon-green);border-radius:2px;padding:14px 16px;max-width:62ch;margin:0 auto 20px;}
+  .cert-meta{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin:18px 0;}
+  .cert-meta .m{background:rgba(0,0,0,.3);border:2px solid var(--border-glow);border-radius:2px;padding:10px 16px;min-width:120px;}
+  .cert-meta .m .k{font-family:'Press Start 2P',cursive;font-size:.5rem;color:var(--neon-blue);text-shadow:var(--retro-shadow);}
+  .cert-meta .m .v{font-family:var(--vt);font-size:1.15rem;color:#fff;margin-top:6px;font-weight:700;}
+  .cert-meta .m .v.big{color:var(--neon-green);}
+  .cert-face .sigrow{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-top:26px;flex-wrap:wrap;}
+  .cert-face .sig{flex:1 1 200px;text-align:center;}
+  .cert-face .sig .line{border-top:2px solid var(--border-glow);padding-top:8px;font-size:.92rem;color:var(--ink-soft);}
+  .cert-face .sig .who{color:#fff;font-weight:700;}
+  .cert-face .cid{font-family:var(--vt);font-size:.78rem;color:var(--ink-soft);margin-top:18px;letter-spacing:1px;}
+
+  /* voice recording block (on-screen only) */
+  .cert-voice{background:rgba(65,192,255,.08);border:2px solid var(--neon-blue);border-radius:2px;padding:16px;margin-top:18px;text-align:center;}
+  .cert-voice .vh{font-family:'Press Start 2P',cursive;font-size:.7rem;color:var(--neon-blue);text-shadow:var(--retro-shadow);line-height:1.7;}
+  .cert-voice p{font-size:.95rem;color:var(--ink);margin:10px 0;}
+  .cert-voice audio{width:100%;max-width:420px;margin:6px 0 12px;}
+  .listen-link{display:inline-block;font-family:'Press Start 2P',cursive;font-size:.66rem;color:#fff;text-decoration:none;
+    background:linear-gradient(180deg,var(--neon-blue),#0099dd);border-radius:2px;padding:12px 18px;text-shadow:var(--retro-shadow);box-shadow:4px 4px 0 rgba(0,0,0,0.7);}
+  .listen-link:hover{filter:brightness(1.1);}
+
+  /* growth notes — hidden by default, revealed on click (on-screen) */
+  .growth{margin-top:16px;text-align:center;}
+  .growth-btn{font-family:'Press Start 2P',cursive;font-size:.66rem;color:#fff;cursor:pointer;
+    background:linear-gradient(180deg,var(--neon-purple),#7a52cc);border:none;border-radius:2px;padding:12px 18px;text-shadow:var(--retro-shadow);box-shadow:4px 4px 0 rgba(0,0,0,0.7);}
+  .growth-btn:hover{filter:brightness(1.1);}
+  .growth-body{display:none;margin-top:12px;background:rgba(183,148,246,.08);border:2px solid var(--neon-purple);border-radius:2px;
+    padding:14px 16px;font-family:'Noto Sans','Noto Sans KR',sans-serif;font-size:1.0rem;line-height:1.8;color:var(--ink);text-align:left;max-width:62ch;margin-left:auto;margin-right:auto;}
+  .growth.open .growth-body{display:block;}
+  .growth-body .kr{color:var(--neon-yellow);font-weight:700;}
+
+  /* off-screen capture surface */
+  #certCapture{position:fixed;left:-9999px;top:0;width:1000px;}
+  .cap-page{width:1000px;background:#1c1c34;padding:8px;}
 
   .err-box{background:rgba(255,107,107,.1);border:2px solid var(--neon-red);border-radius:2px;padding:14px;color:var(--neon-red);font-weight:700;}
 
@@ -257,6 +325,9 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 
@@ -337,6 +408,20 @@
 </div>
 </div>
 
+<!-- ===== CERTIFICATE MODAL ===== -->
+<div class="cert-overlay" id="certOverlay">
+  <div class="cert-modal">
+    <button class="cert-close" id="certClose">✕</button>
+    <div id="certView"></div>
+    <div class="cert-actions">
+      <button class="btn cert-dl" id="certDownload">⬇ Download PDF</button>
+      <button class="btn ghost" id="certPrint">🖨 Print</button>
+    </div>
+  </div>
+</div>
+<!-- off-screen render surface for PDF capture -->
+<div id="certCapture" aria-hidden="true"></div>
+
 <script>
 /* ============================================================
    CONFIG  — set your two Cloud Function URLs here.
@@ -385,6 +470,7 @@
   const gEmail = document.getElementById('gEmail');
   const gPass = document.getElementById('gPass');
   let auth = null;
+  let storage = null;
   function showErr(m){ gErr.textContent = m; }
 
   async function doLogin(){
@@ -425,6 +511,7 @@
         appId:"1:437370841898:web:6c329a30956d4170a60c53"
       });
       auth = firebase.auth();
+      storage = firebase.storage();
       const lo = document.getElementById('logoutBtn');
       if(lo) lo.onclick = ()=> auth.signOut();
       auth.onAuthStateChanged(user=>{
@@ -493,7 +580,7 @@
   }
   function statClass(s){ return s==='idle'?'idle': s==='done'?'done': s==='err'?'err':'work'; }
   function statText(s){
-    return s==='idle'?'Ready': s==='transcribing'?'Transcribing…': s==='grading'?'Grading…':
+    return s==='idle'?'Ready': s==='uploading'?'Uploading…': s==='transcribing'?'Transcribing…': s==='grading'?'Grading…':
            s==='done'?'Done': s==='err'?'Error':'…';
   }
   function setStatus(s,st){ s.status=st; const idx=students.indexOf(s);
@@ -622,6 +709,15 @@ ${REQUIREMENTS.map((r,i)=>`${i+1}. ${r}`).join('\n')}`;
     renderDash();
     for(const s of students){
       try{
+        // 0) upload .ogg to Firebase Storage for a PERSISTENT recording link (cert needs this).
+        //    Non-fatal: if it fails we still grade, and the result card falls back to the blob URL.
+        setStatus(s,'uploading');
+        try{
+          s.audioRemoteUrl = await uploadRecording(s);
+        }catch(upErr){
+          console.warn('upload failed for', s.file.name, upErr);
+          s.audioRemoteUrl = null; s.uploadError = upErr.message||String(upErr);
+        }
         setStatus(s,'transcribing');
         const transcript = await transcribeAudio(s.file);
         setStatus(s,'grading');
@@ -646,12 +742,19 @@ ${REQUIREMENTS.map((r,i)=>`${i+1}. ${r}`).join('\n')}`;
       else if(s.result){
         const g=s.result; score=g.finalScore+'%';
         status=`<span class="pill ${g.passed?'pass':'fail'}">${g.resultLabel}</span>`;
-        cert = g.passed ? '<span class="pill pass">Eligible</span>' : 'Not eligible';
+        cert = g.passed ? `<button class="xbtn" style="background:linear-gradient(180deg,var(--neon-purple),#7a52cc);" data-dashcert="${s.id}">🏆 Generate</button>` : 'Not eligible';
       }
       tr.innerHTML=`<td>${escapeHtml(s.name||'(unnamed)')}</td>
         <td>${escapeHtml(s.file.name)}</td>
         <td class="score">${score}</td><td>${status}</td><td>${cert}</td>`;
       body.appendChild(tr);
+    });
+    body.querySelectorAll('[data-dashcert]').forEach(btn=>{
+      btn.onclick=()=>{
+        const id=Number(btn.getAttribute('data-dashcert'));
+        const s=students.find(x=>x.id===id);
+        if(s && s.result && s.result.passed) openCertificate(s);
+      };
     });
   }
 
@@ -673,9 +776,13 @@ ${REQUIREMENTS.map((r,i)=>`${i+1}. ${r}`).join('\n')}`;
       card.innerHTML = resultHtml(s,g);
       host.appendChild(card);
     });
-    // wire growth-notes stub toggles
-    host.querySelectorAll('[data-growth]').forEach(btn=>{
-      btn.onclick=()=>{ const el=btn.nextElementSibling; el.style.display = el.style.display==='block'?'none':'block'; };
+    // wire "Generate Certificate" buttons
+    host.querySelectorAll('[data-cert]').forEach(btn=>{
+      btn.onclick=()=>{
+        const id = Number(btn.getAttribute('data-cert'));
+        const s = students.find(x=>x.id===id);
+        if(s && s.result && s.result.passed) openCertificate(s);
+      };
     });
   }
 
@@ -708,7 +815,7 @@ ${REQUIREMENTS.map((r,i)=>`${i+1}. ${r}`).join('\n')}`;
     const fb=g.feedback||{};
     const certStub = g.passed ? `
       <div class="cert-stub">
-        <button class="btn" disabled title="Certificate generation coming next">🏆 Generate Certificate (coming soon)</button>
+        <button class="btn" data-cert="${s.id}">🏆 Generate Certificate</button>
       </div>` : '';
 
     return `
@@ -745,6 +852,176 @@ ${REQUIREMENTS.map((r,i)=>`${i+1}. ${r}`).join('\n')}`;
   function escapeHtml(str){
     return String(str==null?'':str).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   }
+
+/* ============================================================
+   FIREBASE STORAGE: upload .ogg -> persistent download URL
+   ============================================================ */
+  function safeName(n){ return String(n||'student').replace(/[^a-zA-Z0-9가-힣]+/g,'_').slice(0,40) || 'student'; }
+
+  async function uploadRecording(s){
+    if(!storage) throw new Error('Storage not initialized');
+    const path = `speaking-recordings/${Date.now()}_${safeName(s.name)}_${s.id}.ogg`;
+    const ref = storage.ref().child(path);
+    const snap = await ref.put(s.file, { contentType: 'audio/ogg' });
+    return await snap.ref.getDownloadURL();   // tokenized URL — opens without login
+  }
+
+/* ============================================================
+   CERTIFICATE
+   ============================================================ */
+  let activeCert = null;  // the student whose cert modal is open
+
+  function makeCertId(s){
+    if(s.certId) return s.certId;
+    const d = new Date();
+    const stamp = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+    const rand = Math.random().toString(36).slice(2,7).toUpperCase();
+    s.certId = `KL-${stamp}-${rand}`;
+    return s.certId;
+  }
+  function prettyDate(){
+    return new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  }
+  // bold any Korean spans the model wrapped, and lightly highlight raw Hangul runs
+  function krHighlight(text){
+    return escapeHtml(text).replace(/([가-힣]+(?:\s*[가-힣]+)*)/g, '<span class="kr">$1</span>');
+  }
+
+  const TEST_NAME = "Korean Speaking Mission";
+  const SIGNATURE = "캘빈 선생님 · KoreanLearnin";
+
+  function certFaceHtml(s){
+    const g = s.result;
+    const cid = makeCertId(s);
+    const praise = g.certificate && g.certificate.praise ? g.certificate.praise : (g.feedback && g.feedback.overallPraise) || '';
+    return `
+      <div class="cert-face">
+        <div class="brand">★ KoreanLearnin ★</div>
+        <div class="ctitle">Korean Speaking<br>Mission Certificate</div>
+        <div class="award-to">This certifies that</div>
+        <div class="sname">${escapeHtml(s.name||'Student')}</div>
+        <div class="cbody">successfully completed the <b>${TEST_NAME}</b> and demonstrated the ability to introduce themselves and a friend in Korean using names, professions, hobbies, weekend activities, location-based sentences, opinion phrases, and a <span class="kr">같이</span> invitation.</div>
+        ${praise?`<div class="praise">${krHighlight(praise)}</div>`:''}
+        <div class="cert-meta">
+          <div class="m"><div class="k">Final Score</div><div class="v big">${g.finalScore}%</div></div>
+          <div class="m"><div class="k">Result</div><div class="v">${escapeHtml(g.resultLabel)}</div></div>
+          <div class="m"><div class="k">Date</div><div class="v">${prettyDate()}</div></div>
+          <div class="m"><div class="k">Status</div><div class="v big">PASSED</div></div>
+        </div>
+        <div class="sigrow">
+          <div class="sig"><div class="line"><span class="who">${escapeHtml(SIGNATURE)}</span><br>Teacher / Academy</div></div>
+          <div class="sig"><div class="line">Certificate ID<br><span class="who">${cid}</span></div></div>
+        </div>
+        <div class="cid">Awarded by KoreanLearnin · ${cid}</div>
+      </div>`;
+  }
+
+  function growthPageHtml(s){
+    const g = s.result;
+    const notes = g.certificate && g.certificate.growthNotes ? g.certificate.growthNotes : '';
+    return `
+      <div class="cert-face" style="border-color:var(--neon-purple);text-align:left;">
+        <div class="brand" style="color:var(--neon-purple);text-align:center;">Growth Notes · Areas to Review</div>
+        <div class="ctitle" style="font-size:.95rem;text-align:center;">Keep Growing,<br>${escapeHtml(s.name||'Student')}!</div>
+        <div class="cbody" style="text-align:left;max-width:none;">You completed the mission — these are gentle next steps to make your Korean even stronger, not a list of mistakes.</div>
+        <div class="praise" style="border-color:var(--neon-purple);background:rgba(183,148,246,.08);text-align:left;max-width:none;">
+          ${notes?krHighlight(notes):'Keep practicing full Korean sentences with hobbies, places, and invitations — you are building real speaking ability.'}
+        </div>
+        <div class="cid" style="text-align:center;">${makeCertId(s)}</div>
+      </div>`;
+  }
+
+  function openCertificate(s){
+    activeCert = s;
+    makeCertId(s);
+    const recUrl = s.audioRemoteUrl || s.audioUrl;  // prefer persistent; blob is session fallback
+    const persistent = !!s.audioRemoteUrl;
+    const g = s.result;
+    const notes = (g.certificate && g.certificate.growthNotes) || '';
+
+    const view = document.getElementById('certView');
+    view.innerHTML = `
+      ${certFaceHtml(s)}
+      <div class="cert-voice">
+        <div class="vh">Student Voice Recording</div>
+        <p>Listen to your Korean speaking test recording here:</p>
+        <audio controls src="${recUrl}"></audio><br>
+        <a class="listen-link" href="${recUrl}" target="_blank" rel="noopener">▶ Listen to My Recording</a>
+        ${persistent?'':'<p style="color:var(--neon-orange);font-size:.85rem;margin-top:10px;">⚠ This recording was not uploaded to storage, so this link only works in this session. The PDF link will not open later.</p>'}
+      </div>
+      <div class="growth" id="growthBox">
+        <button class="growth-btn" id="growthBtn">🌱 Growth Notes / Areas to Review</button>
+        <div class="growth-body">${notes?krHighlight(notes):'Keep practicing — you completed the mission!'}</div>
+      </div>`;
+
+    const gb = document.getElementById('growthBtn');
+    if(gb) gb.onclick = ()=> document.getElementById('growthBox').classList.toggle('open');
+
+    document.getElementById('certOverlay').classList.add('show');
+    document.body.style.overflow='hidden';
+  }
+
+  function closeCert(){
+    document.getElementById('certOverlay').classList.remove('show');
+    document.body.style.overflow='';
+    activeCert=null;
+  }
+  document.getElementById('certClose').onclick = closeCert;
+  document.getElementById('certOverlay').addEventListener('click', e=>{ if(e.target.id==='certOverlay') closeCert(); });
+  document.getElementById('certPrint').onclick = ()=> window.print();
+
+/* ---------- PDF export (html2canvas -> jsPDF, A4 landscape) ---------- */
+  async function addElementAsPage(doc, el, firstPage){
+    const canvas = await html2canvas(el, { scale:2, backgroundColor:'#1c1c34', useCORS:true, logging:false });
+    const pw = doc.internal.pageSize.getWidth();
+    const ph = doc.internal.pageSize.getHeight();
+    const margin = 8;
+    let w = pw - margin*2;
+    let h = canvas.height * (w / canvas.width);
+    if(h > ph - margin*2){ h = ph - margin*2; w = canvas.width * (h / canvas.height); }
+    const x = (pw - w)/2, y = (ph - h)/2;
+    if(!firstPage) doc.addPage();
+    doc.addImage(canvas.toDataURL('image/png'), 'PNG', x, y, w, h);
+    return { x, y, w, h };
+  }
+
+  document.getElementById('certDownload').onclick = async ()=>{
+    if(!activeCert) return;
+    const s = activeCert, btn = document.getElementById('certDownload');
+    btn.disabled = true; const orig = btn.textContent; btn.textContent = 'Building PDF…';
+    const cap = document.getElementById('certCapture');
+    try{
+      await (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve());
+      // page 1: celebratory face
+      cap.innerHTML = `<div class="cap-page" id="capFace">${certFaceHtml(s)}</div>`;
+      // page 2: growth notes
+      cap.innerHTML += `<div class="cap-page" id="capGrowth">${growthPageHtml(s)}</div>`;
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation:'landscape', unit:'mm', format:'a4' });
+
+      await addElementAsPage(doc, document.getElementById('capFace'), true);
+
+      // clickable recording link on page 1 (English label -> default font renders fine, stays clickable)
+      const recUrl = s.audioRemoteUrl || s.audioUrl;
+      if(s.audioRemoteUrl){
+        const pw = doc.internal.pageSize.getWidth(), ph = doc.internal.pageSize.getHeight();
+        doc.setTextColor(65,192,255); doc.setFontSize(12);
+        const label = '> Listen to My Recording';
+        const tw = doc.getTextWidth(label);
+        doc.textWithLink(label, (pw - tw)/2, ph - 6, { url: recUrl });
+      }
+
+      await addElementAsPage(doc, document.getElementById('capGrowth'), false);
+
+      doc.save(`Certificate_${safeName(s.name)}_${s.certId}.pdf`);
+    }catch(err){
+      alert('Could not build the PDF: ' + (err.message||err));
+      console.error(err);
+    }finally{
+      cap.innerHTML=''; btn.disabled=false; btn.textContent=orig;
+    }
+  };
 </script>
 </body>
 </html>
